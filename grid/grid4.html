@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf8"/>
+    <title>Grid</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="fr"/>
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+    .wrapper{
+        width:100vw;
+        height:100vh;
+        display:grid;
+        grid-template-columns:1fr 2fr 2fr;
+        grid-template-rows:10% 20% 60% 10%;
+        grid-auto-rows: minmax(200px,auto);
+        grid-gap:1rem;
+        grid-template-areas:
+            "aside nav nav"
+            "aside sect1 sect2"
+            "aside main main"
+            "aside footer footer";
+    }
+    .box-1{ background:#aeb; grid-area:aside;  }
+    .box-2{ background:#beb; grid-area:nav;    }
+    .box-3{ background:#aec; grid-area:sect1;  }
+    .box-4{ background:#afa; grid-area:sect2;  }
+    .box-5{ background:#ef5; grid-area:main;   }
+    .box-6{ background:#8a5; grid-area:footer; }
+
+    @media (max-width:768px){
+        .wrapper{
+            grid-template-columns:1fr;
+            grid-template-rows:10% 25% 25% 30% 10%;
+            grid-gap:.5rem;
+            grid-template-areas:
+                "nav"
+                "sect1"
+                "main"
+                "sect2"
+                "footer";
+        }
+        .box-1{
+            display:none;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="box-1">
+                aside
+        </div>
+        <div class="box-2">
+                nav
+        </div>
+        <div class="box-3">
+            sect1
+        </div>
+        <div class="box-4">
+            sect2
+        </div>
+        <div class="box-5">
+            main
+        </div>
+        <div class="box-6">
+            footer
+        </div>
+    </div>
+</body>
+</html>

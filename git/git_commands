@@ -1,0 +1,57 @@
+git status                  #Voir le status d'un dépot git
+git log                     #Voir l'historique du dépot
+git add fichier             #Ajouter un fichier dans le commit
+git commit -m message       #Ajouter un commit avec un message
+git commit -a               #Commit en ajoutant les fichiers déjà présents
+git commit -a -m message    #-a et -m en même temps
+git checkout SHAduCommit    #revenir a un commit précédent
+git checkout branch         #revenir au commit le plus récent (de la branche "branch")
+git revert SHAduCommit      #crée un commit "reverse" du commit entré (revenir en arriere)
+git checkout -- fichier     #remplacer les changements d'un fichier avec le dernier contenu
+                            #du HEAD
+git commit --amend -m msg   #modifie le message du commit courant
+git commit --amend          #permet de modifier le commit courant
+git reset --hard            #supprimer toutes les modifications avant le dernier commit
+git show SHA                #détail d'un commit en particulier
+
+git clone adresse           #cloner un repository distant
+git push origin master      #envoyer les modifications vers un repository distant
+git pull origin master      #recevoir les modifications sur le commit courant
+
+
+git branch nouvelle-branche #créer une branche
+git branch                  #voir les branches disponibles
+git switch branche          #se placer dans une branche
+git branch -d branche       #supprimer une branche
+git diff branche1 branche2  #diff entre 2 branches
+
+git merge branche           #merger une branche
+                            #ATTENTION, on merge toujours une autre branche dans la branche
+                            #courante et pas l'inverse!!!!
+                            #(pour merger une branche dans la branche master,
+                            #je me met dans la branche master, puis "git merge branch-a-merger")
+git mergetool vimdiff       #utiliser vimdiff en cas de conflit
+
+git blame fichier           #obtenir l'historique de modification de tout un fichier
+
+git stash                   #mettre de coté les modifications en cours dans une branche
+git stash pop               #recupérer les modifications mises de coté dans une branche et vide la stash
+git stash apply             #recupérer les modifications mises de coté dans une branche sans vider la stash
+
+
+git remote add origin server #clone le dépot sur un serveur distant
+git push origin branche      #clone une branche sur le serveur distant
+
+git tag nom_tag SHA          #créer un tag
+                             #Très utilisé notamment pour montrer que tel commit
+                             #correspond à une release.
+                             #Ex: git tab 1.0.0 1b2c3dfffff
+                             #tag le commit voulu comme la version 1.0.0 du programme
+
+git log --oneline --abbrev-commit --all --graph --decorate --color #voir le log sous une forme fancy
+                            #ne pas hésiter à utiliser gitX pour une meilleur vue
+
+git gc                      #lance le garbage collector
+
+git cherry-pick             #voir le fichier git_rebase
+git rebase                  #voir le fichier git_rebase

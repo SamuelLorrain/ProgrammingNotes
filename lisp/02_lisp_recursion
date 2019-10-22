@@ -1,0 +1,100 @@
+;;;/// RECURSION ///;;;
+
+;;; Une fonction récursive doit:
+;;; 1. Toujours avoir un cas terminal ("savoir quand s'arrêter")
+;;; 2. Découper un problème sur la plus petite partie possible
+;;; 3. Appeler récursivement cette fonction sur l'ensemble des parties
+;;;    moins la partie déjà traitée
+
+;;;/// RECURSION PATTERNS ///;;;
+;;; Double-Test Tail Recursion
+;;; Tail recursion car le dernier appel
+;;; de COND, après les appels récusifs successifs,
+;;; je fait que renvoyer une valeur
+(defun fun (x)
+    (cond (end-test-1 end-value-1)
+          (end-test-2 end-value-2)
+          (T (func reduced-x))))
+
+;;; Single-Test Tail Recursion
+(defun fun (x)
+    (cond (end-test end-value)
+          (T (func reduced-x))))
+
+;;; Augmenting recursion
+;;; Au lieux de seulement réduire
+;;; le problème en sous problèmes,
+;;; on ajoute une phase en plus,
+;;; un calcul ect.
+;;; C'est pas exemple le cas d'une fonction LENGTH
+;;; définie récursivement
+(defun rec-length (x)
+    (cond ((nullp x) 0)
+          (t (+ 1 (rec-length (cdr x)))))
+
+(defun fun (x)
+    (cond (end-test end-value)
+          (T (aug-fun aug-val (func reduced-x)))))
+
+;;; List-Consing Recursion
+;;; Augmenting recursion, ou la fonction
+;;; d'augmentation est un CONS
+(defun func (x)
+    (cond (end-test nil)
+          (t (cons new-element) (func reduced-n))))
+
+;;; Simultaneous recursion on Several variables
+(defun my-nth (n x)
+    (cond ((zerop n) (first x))
+          (t (my-nth (-n 1) (rest x)))))
+
+(defun fun (n x)
+    (cond (end-test end-value)
+          (t (func reduced-n reduced-x))))
+
+;;; Conditional augmentation
+(defun func (x)
+    (cond (end-test end-value)
+          (aug-test (aug-fun aug-val
+                            (func reduced-x))
+          (T (func reduced-x)))))
+
+;;; Multiples recursions
+(defun func (n)
+    (cond (end-test-1 end-value-1)
+          (end-test-2 end-value-2)
+          (T (combiner (func first-reduced-n)
+                       (func second-reduced-n)))))
+
+;;; CAR/CDR Recursions (tree recursion)
+(defun func (x)
+    (cond (end-test-1 end-value-1)
+          (end-test-2 end-value-2)
+          (t (combiner (func (car x) (cdr x))))))
+
+;;; Helper function recursion
+;;; Parfois on a besoin d'utiliser une
+;;; fonction intermédiaire pour réaliser
+;;; une tache:
+;;; Count-up-recursively contient
+;;; un compteur
+;;; qui ne peut pas être présent
+;;; directement dans count-up
+;;; (count-up 5) : 5
+;;; (count-up 0) : Nil
+(defun count-up (n)
+    (count-up-recursively 1 n))
+
+(defun count-up-recursively (cnt n)
+    (cond ((> cnt n) nil)
+          (t (cons cnt
+                (count-up-recursively
+                    (+ cnt 1) n)))))
+
+;;; Généralement, on veut utiliser
+;;; des tail-recursion fonction car
+;;; elles sont plus rapides.
+;;; Pour ce faire, on a souvent besoin
+;;; d'avoir recours à une fonction
+;;; helper qui rajoute un compteur
+

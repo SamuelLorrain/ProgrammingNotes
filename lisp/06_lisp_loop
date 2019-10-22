@@ -1,0 +1,68 @@
+;;;/// ITERATION ///;;;
+
+;;; Basiquement, on peut tout faire de manière récursive
+;;; En lisp, mais dans certains cas, comme avec des listes
+;;; plates, itérer peut-être plus simple.
+
+;;; Fonctions simples de boucles
+;;; [result-form] indique que ce n'est pas obligatoire
+(dotimes (index-var n [result-form]) body)
+(dolist (index-var n [result-form]) body)
+
+Ex:
+(dotimes (i 4)
+    (format t "~&I is ~S." i)) ;;Affiche 4 lignes
+                               ;;puis NIL
+(dolist (x '(red blue green) 'flowers)
+    (format t "~&Roses are ~S." x)) ;;Affiche 3 lignes
+                                    ;;Retourne le symbole flowers
+
+;;; Si on utilise (return x) dans une dotimes ou une dolist
+;;; On quitte la boucle avec la valeur x, et la result-form est ignorée
+Ex:
+(defun find-first-odd (list-of-numbers)
+    (dolist (e list-of-numbers)
+        (format t "~&Testing ~S..." e)
+        (when (oddp e)
+            (format t "Found an odd number.")
+            (return e))))
+
+;;; Assigner des variables avec les dotimes/dolist
+(defun it-fact (n)
+    (let (prod 1))
+        (dotimes (i n prod)
+            (setf prod (* prod (+ i 1))))) ;;;Calcule une factorielle de façon itérative
+
+(defun it-square-list (list-of-numbers)
+    (let ((result nil))
+        (dolist (e list-of-numbers (reverse result))
+            (push (* e e) result)))) ;;;Comme (mapcar #'square list-of-numbers)
+                                     ;;;Notons qu'on reverse le résultat pour qu'il soit dans l'ordre
+
+
+
+;;;/// DO ET DO* ///;;;
+
+(do ((var1 init1 [update1])
+     (var2 init2 [update2]))
+     (test action-1 ... action-n) body)
+
+;;; Do contient tout ce qu'il est possible
+;;; pour faire de l'itération : assignation de variable,
+;;; tests, terminaisons etc.
+;;; DO* est sa contrepartie, comme LET*
+;;; On peut utiliser RETURN dans DO
+
+Ex:
+(defun launch (n)
+    (do ((cnt n (- cnt 1)))
+        ((zerop cnt) (format t "Blast off!"))
+      (format t "~S..." cnt)))
+(launch 100)
+;;; Renvoi : 10...9...8...7...6...5...4...3...2...1...Blast off!
+             NIL
+
+;;; RETURN-FORM (PAS COMPRIS...)
+
+
+

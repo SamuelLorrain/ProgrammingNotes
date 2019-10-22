@@ -1,0 +1,9 @@
+;;;/// Compilation \\\;;;
+
+;;; COMPILE permet de compiler un programme
+;;; Cela le rend plus rapide.
+
+(compile 'f) ;;; Compiler une fonction
+(compile-file file) ;;; Compiler un programme entier
+
+

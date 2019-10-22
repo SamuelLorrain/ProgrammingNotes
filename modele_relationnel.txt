@@ -1,0 +1,32 @@
+projection  ==> selectionner certaines colonnes d'une relation
+restriction ==> selectionner certaines lignes d'une relation
+
+union ==> ajouter les tuples de deux relations pour former une 3eme relation
+difference ==> si (R1 union R2 = R3) alors (R3 difference R2 = R1)
+produit cartesion => entre R1 et R2 composé de toutes les relations
+    possibles entre R1 et R2
+
+----
+jointure interne ==> "coller" plusieurs tables avec une condition
+
+jointure droite  ==> garder entière la colonne de droite même si la
+    condition n'est pas compléter
+jointure gauche  ==> pareil pour la jointure gauche
+jointure totale  ==> join les tables mais conserve les jointures
+    ou la condition n'est pas complète
+
+==> Une jointure est juste un produit cartésien suivi d'une restriction
+==> Jointure naturelle -> utiliser les colonnes qui ont le même
+    nom pour faire une jointure
+
+----
+Agregation, ne fait pas partie de l'algèbre relationnel.
+
+Une partition est un agregat de tuples dans une relation
+qui possèdent la même valeur (ex: toutes les pommes jaunes)
+
+Quand la partition est faite, on peut faire un calcul sur
+cet agregat, c'est l'agregation.
+En géneral une agregation prend une liste en paramètre et retourne
+une valeur
+

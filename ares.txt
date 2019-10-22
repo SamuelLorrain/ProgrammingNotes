@@ -1,0 +1,123 @@
+#ftp 21
+-connexion contrôle:requêtes et réponses
+-connexion données:fichier/liste fichiers_repertoire
+                   finie à chaque fin de transfert
+LIST/PWD/USER/PASS/CWD/QUIT/RETR/MKD/RMD/STORE
+PORT/
+-réponse 1yz positif preliminaire
+         2yz positif complete
+         3yz positif intermédiaire
+         4yz négative transitoire
+         5yz négative définitif
+         x0z syntaxe
+         x1z information
+         x2z connexions
+         x3z authentification
+         x5z système de fichier
+USER toto/PASS xxx/PORT
+PORT aaa,aaa,aaa,aaa,x,y (x*256+y = port)
+PASV -> mode passif. Si firewall. Le client
+envoi une demande de connexion passive au client
+même syntaxe que PORT. Le serveur ouvre
+un port pour la connexion données
+
+#tftp udp/69
+1 RRQ > requête lecture
+2 WRQ > requête écriture
+3 DATA > données numérotées
+4 ACK
+5 ERREUR
+> Message DATA de 512 octets ou inférieur
+> stop-and-wait (attend toujours un ack)
+
+#smtp 25
+> telnet serveur 25 (voir la connexion)
+HELO > presentation nom de domaine client
+MAIL > id expéridteur message
+RCPT > id destinataire message
+DATA > Envoi contenu jusqu'à une ligne avec juste '.'
+QUIT > Termine l'échange courrier
+VRFY > Verif addr destinataire
+NOOP
+RSET > annule la transaction
+ASCII NVT (7bits)
+format:
+enveloppe : MAIL FROM:/RCPT TO:
+message : from/date/to/subject/x (nom : valeur)
+          ligne vide
+          corps
+          ligne avec '.'
+
+#esmtp 25
+EHLO > HELO esmtp
+SIZE > taille max message
+8BITMIME > envoi du corps sur 8bit
+X-... > extension
+=?charset?encode?encoded-text?=
+charset : us-ascii/iso-8859-x ...
+encode : Q (latin) B (base 64)
+
+#MIME
+Mime-version:
+Content-Type: type/sous-type;parametres
+Content-Disposition
+Content-Transfert-Encoding
+
+#http
+requete:
+GET/POST/HEAD url HTTP/1.x
+Connection : Keep-Alive/Close
+
+reponse:
+HTTP/1.x code phrase
+header: value ...
+
+
+#dns
+
+#pop3
+
+#imap
+
+#RTT (round trip time!)
+soit x RTT = x*y ms
+
+TTL > permet de savoir "ou" la capture a été prise
+
+#tcp sequence number
+le numéro de séquence est utilisé pour
+traquer le nombre de bytes envoyés et reçus
+Si j'ai le numéro de séquence 1 et
+que j'envoi un segment de 50 bytes
+Alors, mon prochain numéro de séquence sera 51
+(50 + 1) (taille + num séquence)
+Si j'envoi 0 bytes (segment ack) alors
+le numéro de séquence reste le même
+
+Le numéro de séquence dépend des données
+envoyées, par des données reçues.
+Un serveur ne peut pas modifier
+le numéro de séquence du client !
+
+#tcp ack number
+Ack = numéro de séquence attendu.
+Si j'envoi un paquet de 100 bytes
+avec pour numéro de séquence 1
+Alors l'ack du paquet retourné
+sera égal à 101 (100 + 1) (taille + num séquence)
+
+Tant qu'aucune donnée n'est échangée l'ack
+reste le même !
+
+#tcp handshake
+SYN seq=0 ack=0
+SYN ACK seq=0 ack=1
+ACK seq=1 ack=1
+
+#tcp Receive window
+2 windows > receive window et send window
+nombre de données maximum qui
+peuvent être envoyées avant un ack
+
+#MTU vs MSS
+maximum segment size

@@ -1,0 +1,160 @@
+Mutations:
+==========
+Heap :
+------
+    Balanced Tree mais la valeur à la racine d'un sub tree doit être
+    plus grand que les valeurs qui le composent.
+
+    - std::make_heap(begin(numbers), end(numbers)); //prend un range et en fait un heap
+    - std::push_heap(begin(number), end(numbers));
+    - std::pop_head(begin(number), end(numbers));
+
+Sort:
+-----
+    - std::sort()
+    - std::partial_sort()
+    - std::nth_elements()
+    - std::inplace_merge()
+    - std::sort_heap(begin(number), end(numbers));
+
+Partition:
+----------
+    - partition_point
+    - partition
+Others:
+-------
+    - rotate
+    - shuffle
+    - next_permutation
+    - prev_permutation
+    - reverse
+
+Secret Runes:
+============
+    (A utiliser avec d'autres algos pour en faire de nouveaux)
+    - stable_* (stable_sort, stable_partition)
+    - is_* (is_sorted, is_partitioned, is_heap)
+    - is_*_until (is_sorted_until, is_partitioned_until, is_heap_until)
+
+Queries:
+========
+Values Queries:
+---------------
+    - count()
+    - inner_product()
+    - accumulate/(transform_)reduce
+    - adjacent_difference
+    - partial_sum
+    - sample
+    - (transform_)inclusive_scan
+    - (transform_)exclusive_scan
+
+Property Queries:
+-----------------
+    - all_of
+    - any_of
+    - none_of
+
+Property Queries on 2 ranges:
+-----------------------------
+    - equal -> bool
+    - lexicographical_compare -bool
+    - mismatch -> std::pair<iterator,iterator>
+
+Searching a value:
+------------------
+Not_Sorted:
+***********
+    - find
+    - adjacent_find
+
+Sorted:
+*******
+    - equal_range
+    - lower_bound
+    - upper_bound
+    - binary_search
+
+Searching a range:
+------------------
+    - search
+    - find_end
+    - find_first_of
+
+Searching a relative value:
+---------------------------
+    - max_element -> iterator
+    - min_element -> iterator
+    - minmax_element -> std::pair<iterator,iterator>
+
+Algos on sets:
+==============
+    - std::set_difference()
+    - std::set_intersection()
+    - std::set_union()
+    - std::set_symmetric_difference()
+
+    - std::includes
+    - std::merge
+
+Movers:
+=======
+    - std::copy(first, last, out)
+    - std::move(first, last, out)
+    - std::swap_ranges(first, last, out)
+
+    - std::move_backward()
+    - std::copy_backward()
+
+Value Modifiers:
+================
+    - std::fill(first, last, value);
+    - std::generate(fist, last, function);
+    - std::iota(first, last, value);
+    - std::replace(fist, last, value1, value2);
+
+Structure Changers:
+===================
+    - std::remove()
+    - std::unique()
+
+*_Copy:
+=======
+    - std::remove_copy
+    - std::unique_copy
+    - std::reverse_copy
+    - std::rotate_copy
+    - std::replace_copy
+    - std::partition_copy
+    - std::partition_sort_copy
+
+
+*_if:
+=====
+    - find_if
+    - find_if_not
+    - count_if
+    - remove_if
+    - remove_copy_if
+    - replace_if
+    - replace_copy_if
+    - copy_if
+
+
+Other:
+======
+    - transform [collection -> f(x) -> result]
+    - transform(begin(coll), end(coll), std::back_inserter, f);
+    - transform(begin(coll), end(coll), begin(ys), std::back_inserter, f);
+
+    - for_each(begin(collection), end(collection), f)
+            ==> side_effects
+
+
+Raw Memory:
+===========
+    - fill ----> operator=
+    - copy ----> operator=
+    - move ----> operator=
+
+

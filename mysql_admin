@@ -1,0 +1,5 @@
+-- Create Database
+CREATE DATABASE nom_de_la_base;
+
+--Voir les Databases existantes
+SHOW DATABASE;

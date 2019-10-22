@@ -1,0 +1,29 @@
+N                       #Combine 2 lignes et les mets dans le pattern space (ajoute une 2eme ligne au buffer).
+                        #permet d'utiliser '\n' dans les matchs et donc de travailler sur plusieurs lignes.
+
+D                       #Supprime le pattern space jusqu'a '\n'
+P                       #affiche la première partie du pattern space jusqu'à '\n'
+
+sed '/#$/ {
+    N
+    s/#\n//
+}'                      #si il y a # à la fin d'une ligne, supprime le saut de ligne et le #
+
+sed -n '/ONE/ {
+    N
+    /\n.*TWO/ p
+}'                      #n'afficher seulement 2 lignes qui contiennent ONE et TWO
+
+sed -n '/skip3/ {
+    N
+    N
+    s/skip3/\n.*\n.*/# 3 lignes deleted
+}'
+
+sed '/ONE/ {
+    N
+    /\n.*TWO/ D
+}'                     #si une ligne après celle qui contient ONE, contient TWO.
+                       #la supprimer
+
+

@@ -1,0 +1,180 @@
+#base
+pwd
+ls
+cd
+mv
+rm
+rmdir
+touch
+mkdir
+man
+
+#base 2
+head
+tail
+tail -f
+ln -s
+clear
+
+#what happened in that machine
+w
+top
+netstat -tupln
+where <command>
+
+#bash
+|
+1> OU >
+>>
+2>
+1&2>
+<
+
+#more bash
+&&
+wc
+grep
+cut -d: -f2 EGAL coupe en fonction d'un delimiteur (ici :) et selectionne un champ (field, ici 2)
+sort
+uniq
+
+#apt
+apt update
+apt upgrade
+apt remove
+apt search
+(apt-cache search)
+
+#user & group
+id
+whoami
+/etc/passwd
+/etc/shadow
+useradd ET userdel
+usermod -U
+/etc/skel
+/etc/group
+man newusers
+
+#process
+//process id (pid)
+//init pid = 1
+kill
+kill -l
+killall <program>
+pkill
+ps aux
+
+#process 2
+//nice EGAL priorité d'un processus
+//state (zombie)
+//ppid (parent process id)
+nice -n 10 <command> EGAL modifie la priorité d'un processus le nombre peut aller de -20 à 20
+renice -5 <pid>
+
+#/proc
+cmdline EGAL line de comment le processus à été appelé 
+cwd EGAL ou a été appelé le processus
+environ EGAL environnement du processus
+state EGAL memory
+strace EGAL trace les syscall et les signaux
+
+#filesystem
+df -ah EGAL montre les file system et leur taille
+
+#important / directory
+/dev EGAL devices
+/proc EGAL processus
+/etc EGAL configuration data for all softwares (regarder en cas de soucis)
+/sbin EGAL secure/critical binaries
+/bin EGAL binaries
+/tmp EGAL fichier temporaire, données supprimées souvent
+/home EGAL home directory
+/root EGAL root home directory
+/lib | /lib32 | /lib64 EGAL library
+/opt EGAL optional software (non installé par le package manager)
+/usr EGAL fichier non essentiel au system (fichiers utilisateur)
+/usr/include EGAL fichiers à inclure pour compiler
+/usr/src EGAL fichiers source
+/usr/local EGAL fichiers compilé par l'utilisateur
+/usr/share EGAL bin communs à plusieurs systemes
+/var EGAL "various"
+/var/log EGAL logs
+man hier EGAL man sur la hierarchie des fichiers
+man lsof
+
+#file types
+- EGAL regular file
+b EGAL block (HD etc.)
+c EGAL character (mouse/keyboard)
+d EGAL directory
+l EGAL lien symbolique
+
+#cron
+crontab -l
+crontab -e
+/etc/cron.d/ EGAL dossier standard pour les crontab des différents bin
+/etc/crontab EGAL fichier crontab contenant tous les crontab du system
+/etc/cron.allow EGAL white-list des utilisateurs pouvant utiliser cron
+
+#
+catb.org
+Michael Lucas
+
+#compression
+compression:
+tar -zcvf nomArchive <directory>
+decompression
+tar -zxvf nomArchive
+    f fichier
+    v visual
+    c compress
+    z gz
+    x decompress
+
+#script
+script <fichier>
+script <fichier> --timing=<fichier.log>
+scriptreplay
+
+#shell aliases
+alias lr="ls -lrc"
+alias EGAL montrer tous les alias
+.bashrc
+.zshrc
+
+#lsof
+//liste of open files
+lsof
+lsof | head
+lsof | tail
+lsof <fichier> EGAL renvoi les bin qui utilisent un fichier particulier
+lsof -p <pid>
+lsof -u <username>
+lsof -i :80
+lsof -i udp
+
+#tee
+date | tee fichier.log
+tee prendre une entree, la met à la fois dans un fichier
+et dans la sortie standard
+date | tee -a fichier.log EGAL (comme au dessus mais append)
+
+#detach a program from the terminal
+nohup program >/dev/null 2>&1 &
+
+#ressources
+- Unix and LInux System Administration Handbook
+- Practice of System and Network Administration (higher level)
+- https://help.ubuntu.com/community/Servers
+- https://tutorialinux.com/sysadmin-learning-resources/sysadmin-software-books/
+- arch wiki
+- Linux For Scratch
+- Structure and Interpretation of Computer Programs (Programming, Lisp)
+- The Little Schemer (functional programming, recursion, Lisp)
+- soylentnews.com
+- lobste.rs
+- Deus Ex
+- serverfault.com
+- reddit.com/r/linux
+- reddit.com/r/sysadmin

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf8"/>
+    <title></title>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="canonical" href="https://adresse_canonique.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="fr"/>
+</head>
+<body>
+    <!--
+        chercher:
+          $emit
+          $attrs
+          $listeners
+    -->
+    <!-- Basic -->
+    <p>
+        Every Vue.js Variable is reactive !
+    </p>
+    <div id="app">
+        {{ message }}
+    </div>
+    <div id="app-2">
+        <span v-bind:title="message">
+            Hover your mouse over me for a few seconds
+            to see my dynamically bound title!
+        </span>
+    </div>
+    <div id="app-3">
+        <span v-if="seen">
+            Now you see me
+        </span>
+    </div>
+    <div id="app-4">
+        <ol>
+            <li v-for="todo in todos">
+                {{ todo.text }}
+            </li>
+        </ol>
+    </div>
+
+    <!-- User Input -->
+    <div id="app-5">
+        <p>{{ message }}</p>
+        <button v-on:click="reverseMessage">Reverse Message</button>
+    </div>
+    <div id="app-6">
+        <p>{{ message }}</p>
+        <input v-model="message">
+    </div>
+
+    <!-- Components -->
+    <div id="app-7">
+        <ol>
+            <todo-item
+                v-for="item in groceryList"
+                v-bind:todo="item"
+                v-bind:key="item.id"
+                ></todo-item>
+        </ol>
+    </div>
+    <div id="example"></div>
+
+    <!-- Template syntax -->
+    <div id="app-8">
+        <p>Message : {{ msg }}</p><br>
+        <p v-once>This Will never change : {{ msg }}</p>
+        <p>Using mustaches: {{ rawHtml }}</p>
+        <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+        <div v-bind:id="dynamicId"></div>
+        <button v-bind:disabled='isButtonDisabled'>Button</button>
+
+        <!-- Javascript expression -->
+        {{ 1 + 1}}
+        <!-- v-if -->
+        <p v-if="seen">Now you see me</p>
+        <!-- Argument sur un attribut ':' -->
+        <p v-bind:click="doSomething">doSomething</p>
+        <!-- Modifiers ==> appelle "onSubmit
+        à l'appel de event.preventDefault() -->
+        <!--
+            <form v-on:submit.prevent="onSubmit"></form>
+        -->
+
+        <!-- Shorthand -->
+        <a :href="url">{{ url }}</a> <!-- ':' == 'v-bind' -->
+        <button @click="doSomething">...</button> <!-- '@' == 'v-on' -->
+    </div>
+    <div id="app-9">
+        {{ message.split('').reverse().join('') }}
+        <p>{{ message }}</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+        <p>Method reversed message: "{{ method() }}"</p>
+    </div>
+    <div id="app-10">
+        <p>{{ fullName }}</p>
+        <p>{{ firstName }}</p>
+        <p>{{ lastName }}</p>
+    </div>
+    <div id="app-11">
+        <p>
+        Ask a yes/no question:
+        <input v-model="question">
+        </p>
+        <p>{{ answer }}</p>
+    </div>
+    <div id="app-12">
+        <!-- La classe "active" n'existe que si isActive est vrai -->
+        <div v-bind:class="{ active: isActive }">isActive ?</div>
+        <!-- Utilisation de v-bind:class avec class -->
+        <div class="static" :class="{ active: isActive }">v-bind</div>
+        <div :class="classObject">classObject</div>
+        <div :class="[activeClass, errorClass]">a</div>
+        <!-- Ternaire -->
+        <div :class="[isActive ? activeClass: '', errorClass]">a</div>
+        <!-- Equivalent -->
+        <div :class="[{active: isActive}, errorClass]">a</div>
+    </div>
+    <div id="app-13">
+        <!-- Ajoute les class baz et foo au component -->
+        <my-component class="baz boo"></my-component>
+        <my-component class="{active: isActive}"></my-component>
+
+        <!-- V-bind style -->
+        <div v-bind:style="{color: activeColor, fontSize: fontSize + 'px'}">toast</div>
+        <div v-bind:style="styleObject">toast2</div>
+        <div v-bind:style="[baseStyles, overridingStyles]">toast3</div>
+    </div>
+    <div id="app-14">
+        <h1 v-if="awesome">Vue is awesome!</h1>
+        <h1 v-else-if="beautiful">Vue is beautiful!</h1>
+        <h1 v-else>Oh no!</h1>
+
+        <!-- Utilisation des conditions -->
+        <h2 v-if="type === 'A'">Toast</h2>
+
+        <!-- Template pour wrapper plusieurs trucs dans un v-if -->
+        <template v-if='ok'>
+            <h1>Title</h1>
+            <p>Paragraph1</p>
+            <p>Paragraph2</p>
+        </template>
+        <!-- V-show utilise la propriété css "display" alors
+        que v-if modifie le dom-->
+        <p v-show="not_ok">Not Ok</p>
+        <!-- V-show est plus rapide que v-if -->
+    </div>
+    <div id="app-15">
+        <!-- Key permet de conserver les données (essayer de
+        les enlever pour voir)-->
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter your username" key="username-input">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email" key="email-input">
+        </template>
+    </div>
+    <div id="app-16">
+        <ul>
+            <li v-for="item in items">
+                {{ item.message }}
+            </li>
+            <!-- Index property -->
+            <li v-for="(item,index) in items">
+                {{index}} - {{ item.message }}
+            </li>
+            <!-- of à la place de in -->
+            <li v-for="item of items">
+                {{ item.message }}
+            </li>
+            <li v-for="item in object">
+                {{ item }}
+            </li>
+            <li v-for="(value, key, index) in object">
+                {{ index }} - {{ key }} - {{ value }}
+            </li>
+            <!-- key permet de tracker l'identité des nodes
+            pour des questions de rapidité -->
+            <li v-for="item of items" :key="item.id">
+                {{ item.message }}
+            </li>
+            <template v-for="n in 10">
+                {{ n }}
+            </template>
+        </ul>
+    </div>
+    <div id="app-17">
+        <button v-on:click="counter += 1">Add 1</button>
+        <p>{{ counter }}</p>
+        <button @click="greet">Greet</button>
+        <button @click="say('hi')">hi</button>
+        <button @click="say('what')">what</button>
+        <button @click="greet($event)">greet_event</button>
+
+        <!-- .stop, .prevent, .capture, .self, .once, .passive -->
+        <!-- Utilisation des méthodes qu'ont peur mettre sur les event
+        listener comme preventDefault() etc. -->
+        <a @click.stop="greet">g.stop</a>
+        <a @click.stop.prevent="greet">g.stop</a>
+
+        <!-- key modifiers (voir la doc pour d'autres key) -->
+        <input v-on:keyup.enter="submit">
+        <input v-on:keyup.page-down="submit">
+    </div>
+    <div id="app-18">
+        <input v-model="message" placeholder="edit me">
+        <p>Message is: {{ message }}</p>
+        <p style="white-space: pre-line;">{{ message }}</p>
+        <textarea v-model="message" placeholder="add multiple lines"></textarea>
+        <br>
+        <input type="checkbox" id="checkbox" v-model="checked">
+        <label for="checkbox">{{ checked }}</label>
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+        <input type="checkbox" id="john" value="John" v-model="checkedNames">
+        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+        <span>Checked names: {{ checkedNames }}</span>
+        <br>
+        <input type="radio" id="one" value="One" v-model="picked">
+        <label for="one">One</label>
+        <input type="radio" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label>
+        <span>Picked: {{ picked }}</span>
+        <br>
+        <select v-model="selected">
+            <!-- Sans disabled, Ios peut changer -->
+            <option disabled value="">Please select one</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <span>Selected: {{ selected }}</span>
+        <br>
+        <select v-model="selected">
+            <option v-for="option in options" v-bind:value="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+        <span>Selected: {{ selected }}</span>
+        <br>
+        <!-- v-model modifiers: -->
+        <!-- .lazy, .number, .trim -->
+        <input v-model.lazy="msg">
+        <input v-model.number="age" type="number">
+        <input v-model.trim="msg">
+    </div>
+    <div id="app-19">
+        <button-counter></button-counter><br>
+        <button-counter></button-counter><br>
+        <button-counter></button-counter><br>
+        <button-counter></button-counter><br>
+    </div>
+    <div id="app-20">
+        <blog-post
+            v-for="post in posts"
+            v-bind:key="post.id"
+            v-bind:title="post.title">
+        </blog-post>
+    </div>
+    <div id="app-21">
+        <blog-post-plus v-bind:post="p"></blog-post-plus>
+    </div>
+    <div id="app-22">
+        <local-a></local-a>
+        <local-b></local-b>
+    </div>
+    <div id="app-23">
+        <base-checkbox v-model="lovingVue"></base-checkbox>
+        <base-input v-on:focus.native="onFocus"></base-input>
+    </div>
+    <div id="app-24">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="01-basis_declarative_rendering.js"></script>
+    <script src="02-user_input.js"></script>
+    <script src="03-components.js"></script>
+    <script src="04-vue_instance.js"></script>
+    <script src="05-template_syntax.js"></script>
+    <!-- dépendances pour 06 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <script src="06-computed_properties.js"></script>
+    <script src="07-class-style_bindings.js"></script>
+    <script src="08-conditional_rendering.js"></script>
+    <script src="09-list_rendering.js"></script>
+    <script src="10-event_handling.js"></script>
+    <script src="11-form_input_binding.js"></script>
+    <script src="12-components_basic.js"></script>
+    <!--
+    <script src="13-component.js"></script>
+    <script src="14-component_custom_event.js"></script>
+    -->
+</body>
+</html>

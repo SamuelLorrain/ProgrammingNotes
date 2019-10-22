@@ -1,0 +1,72 @@
+Invariant de boucle:
+    - propriétés d'un algo qui permettent de savoir si
+    celui-ci est fini.
+    1) Initialisation : Vrai avant la première itération
+    2) Conservation: Vrai avant et après l'itération suivante
+    3) Quand la boucle est terminée, propriété utile pour montrer
+    la validité de l'algo.
+
+Démonstration, invariant pour un tri par insertion:
+    1)Initialisation: avant la boucle le tableau A[1..j-1] contient
+    un seul élément, qui est forcement trié
+    2)Conservation: On insère la valeur dans le tableau A[1..j-1]
+    uniquement si l'élément est à la bonne position. L'élément est
+    donc trié.
+    3)Terminaison: Quand la boucle se termine, le sous-tableau A[1..j-1]
+    se compose des éléments de base mais triés.
+    L'invariant de boucle est donc que A[1..j-1] contient toujours
+    des éléments triés
+
+Analyse du tri par insertion:
+    En général le temps d'execution d'un algo dépend de la taille de son
+    entrée.
+    Le temps d'éxecution est le nombre d'opérations élémentaires executées.
+    Basiquement, on peut compter toutes les instructions
+    de l'algorithme. La somme donne le temps d'execution.
+    (besoin de faire des sommations pour les boucles néanmoins)
+
+    Le temps d'execution dépend de la taille de l'entrée mais aussi
+    de sa qualité.
+    Le tri pas insertion a un temps d'éxecution différent suivant l'entrée.
+    Cas optimal ==> fonction linéaire
+    Cas le plus défavorable ==> fonction quadratique
+
+    On note le taux de croissance, ou l'ordre de grandeur du temps
+    d'execution en ne notant que le terme dominant de la formule : theta(n2)
+    pour une fonction quadratique.
+
+#-----------------------
+
+Diviser pour régner:
+    Méthode de création d'algo en 3 étapes:
+        1) Diviser le problème en sous-problèmes
+        2) Régner sur les sous-problèmes en les résolvant de manière
+        récursive. Si la taille est suffisamment faible, les résoudre
+        directement
+        3)Combiner les solutions pour obtenir le résultat
+    ex: Tri par fusion:
+        1) Diviser la suite de n éléments à trier en deux sous-suite
+        de n/2 éléments
+        2) Trier les deux sous-suites de manière récursive en utilisant
+        le tri par fusion.
+        3) Trier les deux sous-suites triés pour produire la réponse triée
+
+
+    Temps d'execution algo recursif T(n):
+        Si la taille n de l'entrée est <= à une certaine constante,
+        alors theta(1)
+        Sinon aT(n/b)+D(n)+C(n)
+        ou a est le nombre de sous-problèmes dont la taille
+        de chacun est 1/b de la taille du problème initial
+        D(n) est le temps pour diviser le probleme sous-problèmes
+        C(n) pour construire la solution finale
+
+        T(n) = | theta(1)          si n<=c,
+               | aT(n/b)+D(n)+C(n) sinon
+
+    Tri par fusion:
+        T(n) = | c                  si n = 1
+               | 2T(n/2) + cn       si n > 1
+
+        T(n) = cn lg n + cn
+        donc: theta(n log n)

@@ -1,0 +1,56 @@
+;;;/// IO ///;;;
+
+"String" ;;; Une string s'évalue à elle même comme
+         ;;; les nombres
+(stringp "String") ;;;T
+
+(format T "String") ;;; Ecrit sur l'écran et renvoi null
+                    ;;; (c'est donc une fonction avec un side effect)
+                    ;;; (T indique qu'on écrit sur l'écran)
+;;;La fonction format permet d'utiliser les caractères spéciaux pour
+;;;l'affichage.
+
+;;; ~% est remplacé par un saut de ligne
+;;; (format T "~S ~S" '(list) 5), ~S affiche la représentation graphique d'une S-expression
+;;; ~A, comme ~S mais échappe les guillemets quand on affiche une string
+;;; ~10S définie une taille pour l'objet affiché
+;;; ~D   affiche un nombre en notation décimale
+;;; ~F   affiche un nombre flottant
+
+;;;Fonctions anciennes, présentes seulement pour la compatibilité ascendante:
+;;;TERPRI, PRIN1, PRINC, PRINT
+
+
+;;; Read permet de lire une variable
+(defun my-square ()
+    (format t "Please type a number: ")
+    (let ((x (read)))
+        (format t "The number ~S squared is ~S.~%" x (* x x))))
+
+;;; yes-or-no-p demande à l'utilisateur de rentrer yes, y ou no,n
+;;; et en fonction, renvoi T ou NIL
+;;; il existe aussi y-or-n-p qui ne marche qu'avec y et n
+(yes-or-no-p "Do you seek Zen enlightenment ?")
+
+
+;;;/// LECTURE ET ÉCRITURE DE FICHIERS ///;;;
+
+;;; with-open-file, fonctionne comme let, met un stream dans une
+;;; variable. Après le body, le fichier est fermé automatiquement
+(with-open-file (var pathname)
+    body)
+
+;;; On utilise dans le body, un argument avec la fonction read pour lire
+;;; dans le stream
+(with-open-file (stream "file/location")
+    (let (a (read stream)) (format "~S" a))) ;;; Lit une ligne du fichier
+
+;;; Pour écrire dans un fichier:
+(defun f (x)
+(with-open-file
+    (stream "file/location" :direction :output)
+    (format stream "~S~%" x)))
+
+;;; Gestion des EOF
+(voir dans common lisp a gentle introduction p314)
+

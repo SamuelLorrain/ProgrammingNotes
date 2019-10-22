@@ -1,0 +1,98 @@
+;;;/// ARRAY ///;;;
+
+;;; Array est un type de donnée complexe en LISP
+;;; il n'est pas très utilisé en LISP.
+;;; C'est un bloc de stockage contigus de taille fixe
+
+(setf my-vec '#(TUNING VIOLIN 440 A))
+
+;;; '# permet de créer un vector.
+;;; CAR et CDR ne fonctionnent pas avec
+;;; les arrays, car ce ne sont pas des cons-cells
+
+;;; L'avantage par rapport aux list
+;;; est qu'on peut accéder à chaque élement
+;;; à la même vitesse, sans passer par une chaine
+;;; de pointeurs
+
+
+;;; Pour pouvoir afficher les arrays, la
+;;; variable globale *print-array* doit être
+;;; mise à T
+
+(setf *print-array* t)
+
+my-vec ;; Renvoi #(TUNING VIOLIN 440 A)
+
+;;;Quelques fonctions sur les arrays
+
+(aref my-vec 1) ;;;VIOLIN (NTH sur les arrays)
+
+(setf (aref my-vec 1) 'GUITAR) ;;;Modifie VIOLIN en GUITAR dans l'array
+
+(length my-vec) ;;; 5
+(reverse my-vec) ;;; #'(A 440 GUITAR TUNING)
+(nreverse my-vec) ;;; #'(A 440 GUITAR TUNING) (modifie l'array)
+(find-if #'number-p my-vec) ;;;440
+
+
+;;; CAR, CDR, MEMGGER, SUBST,SUBLIS,NCONC ne fonctionnent pas.
+
+
+;;;Fonction pour créer des arrays:
+(make-array 5 :initial-element 1) ;;; #'(1 1 1 1 1)
+(make-array 5 :initial-content '(a e i o u)) ;;; #'(a e i o u)
+
+;;;/// STRINGS \\\;;;
+;;; Les strings sont des sortes d'array.
+;;; Ainsi, toutes les fonctiosn qui fonctionnent
+;;; Sur les arrays, fonctionnent sur les strings
+
+(aref "Test" 3) ;Renvoi #\t
+
+;;; #\k est la représentation d'un caractère
+;;; Pour modifier un caractère dans une chaine,
+;;; il faut faire:
+(setf x "Test")
+(setf (aref x 1) #\o) ;;; "Tost"
+
+
+;;;/// HASH TABLE \\\;;;
+
+;;; Les hash tables sont des listes associatives qui implémentent
+;;; un algorithme de hash pour être plus rapide.
+;;; Les associations listes sont généralement plus simples à
+;;; utiliser cependant.
+
+;;; l'unique façon de créer des hash-tables:
+(setf h (make-hash-table))
+;;; gethash permet d'ajouter un association dans la table
+;;; ou de la retrouver
+(setf (gethash 'john h) '(attorney (16 maple drive)))
+(gethash 'john h) ;; Renvoi '(attorney (16 maple drive)) T
+(gethash 'bill h) ;; Renvoi NIL NIL
+
+;;;gethash retourne 2 valeurs : l'item ou nil si il ne trouve pas l'item
+;;; et T ou NIL si il trouve ou pas la hash-table
+
+
+;;;/// PROPERTY LIST \\\;;;
+
+;;; Une property list est
+;;; semblable aux listes associatives
+(ind-1 value-1 ind-2 value-2)
+;;; Pour accéder à un élément d'une property list
+
+(get 'property-list 'indicator)
+(setf (get 'property-list 'indicator) 'new-value)
+
+;;; VOIR SUR UN AUTRE BOUQUIN PARCE QUE LÀ C'EST PAS SUPER CLAIR
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+;;;/// VARIABLES SPÉCIALES \\\;;;
+
+;;; Les variables sont dites spéciales, si elles ont un scope dynamique
+;;; les variables dynamiques ne sont local à aucun scope.
+(defvar bird) ;;; déclare une variable spéciale
+
+(defparameter *total-glasses*) ;;;utilisé pour les paramètres
+
+(defconstant pi 3.14159) ;;;créé des constantes
+
+
+
+

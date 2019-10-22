@@ -1,0 +1,243 @@
+;;;/// NOTATION DES ELEMENTS DE BASE ///;;;;
+5 ;;; Number
+T ;;; True
+NIL ;;; False
+() ;;; Liste vide (évalue à False)
+'5 ;;; Quoted notation
+'symbol ;;; Définie un symbole (quote)
+"A quoted object evaluates to the object itself, without the quote"
+=>
+;;;Ex, mauvaise utilisation des quoted notation:
+(list 33 'squared 'is (* 33 33)) ;;; (33 squared is 1089)
+(list 33 'squared 'is '(* 33 33)) ;;; (33 squared is (* 33 33))
+
+(quote x) == 'x
+
+;;;/// FONCTIONS DE BASE ///;;;;
+(+ 5 5) ;;;Evalue à 10
+(equal x y) ;;;T ou NIL
+(oddp x)
+(evenp x)
+(nullp x)
+(not x)
+(< x y)
+(> x y)
+(numberp x) ;;True si c'est un Number
+(symbolp x) ;;True si c'est un Symbol
+(atom x) ;;True si c'est un atom (tout sauf un élement composé)
+
+(type-of x) ;;Renvoi le type de l'objet
+
+;;; différence eq, equal,eql,=, equalp
+(equal '(a b c) '(a b c)) ;;T
+(eq '(a b c) '(a b c))    ;;Nil (compare les adresses des pointeurs sur les                           ;;    listes)
+(eql 5 5)               ;;T
+(eql '(a b c) '(a b c)) ;; Compare les pointeurs sauf pour les Number
+(= 5 5.0)               ;;T Permet de comparer des Numbers
+                        ;;d'un type différent
+
+(equalp "foo bar" "Foo BAR") ;;t
+(equal "foo bar" "Foo BAR") ;;nil
+
+;;;/// LISTES ET CONSTRUCTIONS DE LISTE ///;;;;
+(list 'a 'b 'c) ;;;Evalue à (a b c)
+(cons 'a '()) ;;;Evalue à (a)
+(cons 'a 'b) ;;; (a . b) Liste chainée avec pour
+             ;;; dernier élement b plutôt que nil
+             ;;; (non terminal list ?)
+(car '(a b c)) ;;; renvoi le premier élement, ici a
+(cdr '(a b c)) ;;; renvoi tout sauf le premier élement ici (b c)
+(cadr '(a b c)) ;;; b
+(length '(a b c) ;;; 3
+(length '(a b (c d e))) ;;; 3
+;;; Il existe d'autres variantes à car et cdr
+
+(append '(a b)'(c d)) ;;; (a b c d)
+
+(reverse '(a b c d)) ;;; (d c b a)
+
+(defun add-to-end (x y)
+    (reverse (cons y (reverse x))))
+
+
+;;;nthcdr -> cdr numéro x
+(nthcdr 0 '(a b c)) ;;; (a b c)
+(nthcdr 1 '(a b c)) ;;; (b c)
+(nthcdr 2 '(a b c)) ;;; (c)
+(nthcdr 3 '(a b c)) ;;; nil
+
+;;;renvoi le nth élément de la liste
+(nth 0 '(a b c)) ;;; a
+(nth 2 '(a b c)) ;;; c
+
+(last '(a b c)') ;;; c
+
+(remove 'a (b a n a n a)) ;;; (b n n)
+
+;;;list as set
+(member 'a '(a b c)) ;;; '(a b c)
+(member 'a '(b c d)) ;;; nil
+(intersection '(a b c) '(b c d)) ;;; (b c)
+(union '(a b c) '(b c d)) ;;; (a b c d)
+(set-difference '(a b c) '(b c d)) ;;; (a d)
+(set-exclusive-or '(a b c) '(b c d)) ;;; (a d)
+(subsetp '(a) '(a b c)) ;;; t
+(subsetp '(d) '(a b c)) ;;; nil
+
+;;;list as table
+(setf words
+    '((one un)
+      (two deux)
+      (three trois)
+      (four quatre)
+      (five cinq)))
+
+(assoc 'three words) ;;;Renvoi (three trois)
+(assoc 'four words)  ;;;Renvoi (four quatre)
+(assoc 'six words)   ;;;Renvoi nil
+
+(setf sound
+    '((cow . moo)
+      (pig . oink)
+      (cat . meow)
+      (dog . woof)
+      (bird . tweet)))
+
+(rassoc 'woof sounds) ;;;Renvoi (dog . woof)
+(rassoc 'dog sounds) ;;;Renvoi (dog . woof)
+;;;rassoc utilise cdr alors qu'assoc utilise car
+
+
+;;;/// DEFINITION DE FONCTION ///;;;;
+(defun nom-fonction (x y ...) (corps) (de) (la) (fonction)) ;; Syntaxe pour
+            ;;;définir une fonction
+(defun fn-sans-arguments () (corps))
+;;;Exemple
+(defun square (x) (* x x))
+(square 5) ;;;Renvoi 25
+
+(defun a ()
+"Façon standard de documenter le code."
+body)
+
+;;;Label permet de créer une fonction dans un
+;;;defun. Utile pour faire de la tail-recursion etc.
+(defun count-up (n)
+    (labels ((count-up-recursively (cnt)
+                (if (> cnt n) nil
+                    (cons cnt
+                        (count-up-recursively (+ cnt 1)))))))
+    (count-up-recursively 1))
+
+(label ((fn-1 args-1 body-1)
+         ...
+         fn-n args-n body-n))
+
+
+;;; On peut avoir des arguments optionnels dans les fonctions:
+(defun f (x &optional y) body...) ;;;y est optionnel
+
+(defun f (x &optional (y 2)) body...) ;;;On peut donner une valeur par défaut à un argument optionnel
+                                    ;;;ici, y est mis à 2 si aucune valeur n'est donnée
+
+(defun f (x &rest args) body...) ;;; Les arguments mis après &rest sont traités comme une liste
+
+
+;;; Certaines fonctions acceptent des keywords arguments
+;;; Ex: (member x y :test #'equal)
+(defun f (x &keys y z)) body...)
+(defun f (x &keys (y 'valeur-par-defaut)) body...)
+(f x :y 'une-autre-valeur) ;;;Appel de la fonction f
+
+;;; &aux est un équivalent à LET* mis dans les arguments de la fonction
+(defun f (x &aux (y (length x))) body...)
+
+;;;/// CONDITIONS ///;;;
+(if (condition) (if-true-evaluate-this) (if-false-evaluate-this))
+Ex: (if (nullp 5) (* 5 5) (+ 5 5)) ;;; Renvoi 10
+
+(cond (test-1 consequent-1)
+      (test-2 consequent-2)
+      ...
+      (test-n consequent-n)
+      (T consequent-else)) ;;;simule un cas par défaut
+
+;;; and et or
+(defun s-p-o (x)
+(and (< x 100) (> x 0) (oddp x)))
+(defun g-test (x y)
+(or (> x y) (zerop x) (zerop y)))
+
+
+;;; AND évalue un par un les clauses. Renvoi la première
+clause NIL, sinon renvoi la dernière clause vrai:
+(and 'george nil 'harry) ;;;Renvoi NIL
+(and 'george 'fred 'harry) ;;;Renvoi 'harry
+
+;;; OR évalue un par un les clauses. Renvoi la première
+différente de NIL
+(or nil 'fred 'harry) ;;;Renvoi fred
+(or nil t t) ;;;Renvoi t
+
+;;;OR/AND, IF et COND sont interchangeables
+
+
+;;; WHEN et UNLESS
+(WHEN test body)   ;;; Si le test renvoi NIL, renvoi NIL, sinon evalue le body, et retourne le dernier résultat
+(UNLESS test body) ;;; Pareil, mais n'exécute le body que si le test renvoi NIL (l'inverse quoi).
+                   ;;;L'intéret par rapport à COND est stylistique!
+
+
+;;;/// VARIABLES ET SIDE EFFECTS ///;;;
+(setf vowels '(a e i o u)) ;;;Créé la variable globale
+                           ;;;vowels avec pour valeur
+                           ;;;(a e i u o)
+
+(random 5) ;;;renvoi un nb entre 0 et 5
+(random 5.0) ;;;renvoi un nb entre 0.0 et 5.0
+
+;;;Let permet de créer des variables qui peuvent être modifiées
+;;;Dans le corps
+(let ((var-1 value-1)
+      (var-2 value-2)
+      ...
+      (var-n value-n))
+      body)
+Ex:
+(defun average (x y)
+    (let ((sum (+ x y)))
+        (list x y 'average 'is (/sum 2.0))))
+
+
+(let* () ()) ;;Comme let, saut que les variables sont créées de façon
+             ;;consécutive, et non toute à la fois.
+             ;;du coup, on peut créer des variables intérmédiaires
+             ;;utilisant les résultats des variables créées avant
+             ;;dans let
+
+
+;;;/// TREES ///;;;
+;;;Les trees sont des nested lists
+(subst 'a 'b '(a c (d a) (c (d a)))) ;;; Renvoi (b c (d b) (c (d b)))
+(sublis '((a . b) (c . d))' '(a c (a c))) ;;; Renvoi (b d (b d))
+
+;;; CAR/CDR Recursions (tree recursion)
+;;; (voir le reste de la recursion dans 02_lisp_recursion)
+(defun func (x)
+    (cond (end-test-1 end-value-1)
+          (end-test-2 end-value-2)
+          (t (combiner (func (car x) (cdr x))))))
+
+
+;;;/// INTERNAL ///;;;
+(symbol-name 'a) ;;; Renvoi le nom d'un symbole
+(symbol-function 'f) ;;; Renvoi le code d'une fonction
+
+(eval '(+ 1 3)) == (+ 1 3) = 4 ;;;On utilise généralement
+                               ;;;pas EVAL explicitement
+
+(step x) ;;;Montre l'évaluation d'une fonction
+
+*terminal-io* ;;; La variable Stream qui représente stdin
+
+(describe x) ;;; Décrit x, donne des informations utiles

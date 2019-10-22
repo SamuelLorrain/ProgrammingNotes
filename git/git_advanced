@@ -1,0 +1,193 @@
+(think-like-a-git.net)
+- Un dépot GIT est une sorte d'immense graph
+- A un moment donné, un commit est:
+    1) Un pointeur vers l'état du code au même moment
+    2) zéro ou plus de pointeurs vers des commits "parents"
+
+- Les références sont des pointeurs sur des commits qui peuvent
+donner des informations, il y a 3 types de references :
+    local branch,
+    remote branch,
+    tag
+(Une référence à local branch est un fichier dans .git/refs/heads)
+
+Les local branch references sont spécifiques au dépot local,
+commit, merge, rebase et reset affectent les local branch.
+
+Les remote branch references sont des références unique
+aux dépots spécifiés comme "remote".
+fetch et push affectent les remote branch references
+
+Les tags sont des references qui ne peuvent pas changer
+(sauf avec --force). Seul la command tag affecte
+la référence.
+
+
+En faisant un git commit --amend, on peut modifier le commit
+courant. Cependant, en interne, un nouveau commit est crée,
+et l'autre est gardé en mémoire.
+Ainsi, tant que le garbage collector n'a pas été lancé (git gc),
+il est récupérable.
+Le garbage collector fonctionne en partant de toutes les branches
+vers toutes les branches, puis en dressant une liste des
+commit non atteignables
+===> Les références permettents aux commit d'être atteignable
+(si un commit n'est ni en local, ni remote ni tag, on ne peut
+pas l'atteindre)
+
+Créer une branche, c'est créer une référence.
+En créer une est une façon de "nail down" une partie
+du graph qu'on peut vouloir retrouver plus tard (un état du repo).
+Ni git merge, ni git rebase ne changent les commits existants,
+on peut à tout moment créer des branches temporaires pour
+expérimenter des fonctionnalités
+
+technique pour comprendre comment fonctionne git:
+//http://think-like-a-git.net/sections/experimenting-with-git/use-your-targeting-computer-luke.html
+(
+Si on veut savoir comment une commande modifie un dépot,
+on fait la commande, et on essai de deviner comment
+la modification a été effectuée dans GitX (sans auto-refresh)
+)
+
+#Scout Pattern (pour les débutants)
+1. Se mettre sur la bonne branche & s'assurer d'avoir un "clean working state"
+2. Créer une nouvelle branche (ex: test_merge) et aller dessus
+3. merger les deux branches
+4. Switcher sur le visualizer et prédire ce que le merge va faire
+5. Refresh le visualizer.
+6.
+    Si on est content du résultat: Bouger la "vrai" branche vers la branche test_merge
+    Sinon: Supprimer la branche test_merge
+
+Explication détaillée:
+1. `git status` pour être sur qu'on est sur la branche "master"
+et vérifier qu'il y a écrit "nothing to commit (working directory clean)"
+2. `git checkout -b test_merge && git status` On devrait être sur la branche merge
+3. `git merge spiffy_new_feature` (merge de la feature de test dans test_merge)
+Pour annuler le merge `git reset --hard`
+4.
+    a) Après le merge, on doit voir le nouveau commit
+    b) Le nouveau commit doit avoir un message comme "Merge branch 'spiffy_new_feature' into 'master'"
+    c) La branche test_merge doit avoir bougé vers ce nouveau commit alors que le master
+       et spiffy_new_feature n'ont pas bougées
+5.
+6.
+Si le résultat est concluant: `git checkout master && git merge test_merge`
+Sinon                       : `git checkout master && git branch -D test_merge`
+
+
+#Savepoint Pattern (pour les utilisateurs avancés)
+1. Se mettre sur la bonne branche & s'assurer d'avoir un "clean working state"
+2. Créer une nouvelle branche comme point de sauvegarde MAIS NE PAS ALLER DESSUS
+3. faire le merge (master et spiffy_new_feature)
+4. aller sur le visualizer et prédire
+5. verifier la prédiction
+6.
+    Si oui: supprimer le savepoint
+    Si non: reset la branche sur le savepoint
+
+Explication détaillée:
+1. `git status` pour être sur qu'on est sur la branche "master"
+et vérifier qu'il y a écrit "nothing to commit (working directory clean)"
+2. `git branch savepoint && git status`, on doit être encore sur la
+branche master!
+3. git merge spiffy_new_feature
+5. Si c'est bon (voir au dessus pour des exemples de "bons" trucs)
+6.
+    Si oui: `git branch -d savepoint`
+    Si non: `git reset --hard savepoint && git branch -d savepoint`
+
+
+#Black Belt Merging
+le reset peut utiliser:
+    - le nom d'une branche,
+    - tags
+    - références relatives comme HEAD^, HEAD^^ ou HEAD~3
+    - SHA partiels
+    - SHA entiers
+(pas obligatoirement une branche donc)
+
+Enfait, on est pas obligé de créer des branches comme des savepoints
+mais juste de faire `git reset --hard <commit>` pour revenir en arrière
+
+#Rebase
+Attention, pour utiliser rebase dans un projet à plusieurs,
+il faut faire attention à ce que tout le monde soit à l'aise avec.
+
+`git cherry-pick` prend un ou plusieurs commit, et applique
+le changement que chacun introduit en enregistrant un nouveau commit.
+
+Il prend un commit de quelque part et le "rejoue" peut importe ou on est:
+Cela permet de modifier l'historique des commits.
+
+ex, l'historique suivant:
+    f<--g<--h
+    /
+a<--b<--c<--d<--e
+        \
+        i<--j<--k
+
+Si on est dans H et qu'on fait git cherry-pick E, alors on se retouve avec
+le graph suivant:
+
+    f<--g<--h<--e'
+    /
+a<--b<--c<--d<--e
+        \
+        i<--j<--k
+
+ou encore, avec `git cherry-pick C D E`
+
+    f<--g<--h<--c'<--d'<--e'
+    /
+a<--b<--c<--d<--e
+        \
+        i<--j<--k
+
+==> Git a copié un commit et collé à un autre emplacement
+
+##Simuler `git rebase` avec `git cherry-pick`
+Git rebase est une espèce de manière de faire git cherry-pick sur
+tous les commits d'une branche donnée
+(les parenthèses symbolisent les branches)
+
+    f<--g<--h<--(foo)
+    /
+a<--b<--c<--d<--e<--(bar)
+        \
+        i<--j<--k<--(baz)
+
+si on fait:
+git checkout foo
+git checkout -b newbar
+git cherry-pick c d e
+on obtient
+          (foo)
+            |
+            v
+    f<--g<--h<--c'<--d'<--e'<--(newbar)
+    /
+a<--b<--c<--d<--e<--(bar)
+        \
+        i<--j<--k<--(baz)
+
+
+ensuite, si on fait:
+git checkout bar
+git reset --hard newbar
+git branch -d newbar
+on obtient:
+
+          (foo)
+            |
+            v
+    f<--g<--h<--c<--d<--e<--(bar)
+    /
+a<--b<--c
+        \
+        i<--j<--k<--(baz)
+
+On aurait pu faire la même opération simplement avec:
+`git rebase foo bar`
+==> La fonction de rebase est de réecrire l'historique

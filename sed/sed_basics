@@ -1,0 +1,79 @@
+#Options de base
+#!/bin/sed -f           #au début d'un fichier, rend le fichier interprétable par sed
+set '' file             #affiche un fichier
+set -n '' file          #n'affiche pas le retour sur la sortie standard
+set -e 'command' file   #l'argument après -e est une commande sed
+set -f 'command' file   #l'argument après -f un fichier contenant des commandes
+
+#autres commandes utiles
+-z            #sépare les lignes par '\0' au lieu de '\n'
+-E            #regex extended
+--follow-symlinks
+-u            #unbuffered, en flux tendu plutôt qu'avec un buffer, plus rapide
+
+
+#Commandes
+sed -e '1d' -e '2d' file    #multiples commandes
+sed -e '1d' file1 file2     #multiples files
+-n /pattern/p               #print le pattern trouvé
+/pattern/p                  #print le pattern trouvé 2x
+/from/to/I p                #case insensitive + print
+
+s/from/to/                  #substitue une chaine de charactère (regex) vers une autre
+s/from/to/g                 #global (continue de chercher sur toute la ligne quand une substitution est trouvée)
+s/from/to/i                 #case insensitive
+s/from/to/ig                #on peut lier les options
+s/from/to/2                 #change la 2eme occurence
+s/from/to/2g                #substitue la 2eme occurence et les suivantes
+s/from/to/w file            #met le résultat dans un fichier
+s/from/to/I                 #case insensitive
+
+s/abc/(&)/g                 #& permet de capturer la chaine de caractère en entrée et la sortir -> abc devient (abc)
+s:\(abc\) \(123\):\2 \1:    #les parenthèses mettent en mémoire match \{nombre} permet de les sortir -> abc 123 devient 123 abc
+s:\(abc\) \1:\1:            #le pattern peut être répété en entrée et en sortie.
+
+3 s/pattern/to/             #le pattern ne s'applique qu'à la ligne 3
+/^#/ s/pattern/to           #chainage de pattern -> si la ligne commence par # executer la substitution
+1,100 s/pattern/to          #de la ligne 1 à 100 executer la substitution
+50,$ s/pattern/to           #de la ligne 50 à la fin, executer le pattern
+/start/,/stop/ s/pattern/to #range avec des patterns (de la ligne qui vérifie le pattern start, à la ligne qui vérifie le pattern stop)
+
+11,$ d                      #supprime de la ligne 11 à la fin
+1,/^$ d                     #supprime du début jusqu'à une ligne vide
+
+-n /pattern/!p              #affiche toutes les lignes sauf celles qui vérifient le pattern
+-n /pattern/!d              #supprime toutes les lignes sauf celles qui vérifient le pattern
+11 q                        #affiche les 11 premières lignes et quitte (n'utilise pas les patterns!)
+
+/start/,stop/ {
+    s/a/b/
+    s/b/c/
+    s/c/d/
+}                           #{ } pour chainer des patterns sur plusieurs lignes et éviter les ambiguités
+                            #utile pour mettre un range dans un range. On peut aussi utiliser "!" avant
+                            #des { } pour inverser la commande
+
+/start/,/stop {
+    /begin/n
+    s/old/new
+}                           #n permet de skiper un truc
+
+
+
+/pattern/ r file            #inclue le fichier file après le pattern
+/pattern/ a "line to add"   #append une ligne après les lignes contenant le pattern
+/pattern/ i "line to add"   #insert une ligne avant les lignes contenant le pattern
+/pattern/ c "change"        #modifie la ligne contenant le pattern
+
+/pattern/ =                 #affiche la ligne courante
+
+y/abcdef/ABCDEF/            #fonctionne comme la commande tr. prend des caractères et les remplace
+
+
+#exemples sympa
+sed 's/./&:/80'             #ajoute un ":" après 80 caractères
+sed '/^g/s/g/s/g'           #si la ligne commence par g, remplacer tous les g de la ligne par un s
+sed '/^g/ s_g_s_g'          #si la ligne commence par g, remplacer tous les g de la ligne par un s
+sed '11 q'                  #affiche les 11 premières lignes puis quitte
+
+

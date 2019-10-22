@@ -1,0 +1,73 @@
+;;;/// TYPES ///;;;
+
+
+(typeep 3 'number) ;;;Renvoi t
+(typeep 3 'float) ;;;Renvoi NIL
+(typeep 'foo 'symbol) ;;;Renvoi t
+
+(type-of x) ;;;Renvoi le type de x
+
+;;;/// STRUCTURES ///;;;
+
+;;; Définir une structure avec
+;;; des valeurs de base
+(defstruct starship
+    (name nil)
+    (speed 0)
+    (condition 'green)
+    (shields 'down))
+;;; Defstruct est une macro qui créé automatiquement
+;;; une fonction make-x (ici make-starship) qui permet
+;;; de créer la structure
+(setf s1 (make-starship))
+;;; Renvoi #S (starship name nil
+                        speed 0
+                        condition green
+                        shields down)
+;;; Pour modifier les valeurs à l'initialisation,
+;;; on utilise des keyword arguments
+(setf s2 (makestarship :name "Reliant" :shields 'damaged))
+
+;;; #S indique que c'est une structure.
+
+;;; Defstruct créé aussi la fonction
+;;; x-p (ici starship-p) qui permet de tester si
+;;; un objet est bien du type de la structure:
+(starship-p 5)  ;;NIL
+(starship-p s1) ;;T
+(typep s1 'starship) ;;T
+(type-of s1)    ;;starship
+
+;;; Pour accéder aux élements d'une structure
+;;; defstruct créé des accesseurs:
+(starship-shields s1) ;;;accède au membre 'shield. ici, renvoi down
+(setf (starship-speed s1) 10) ;;;Modifie un membre de la structure
+
+;;; ATTENTION, REDEFINIR UNE STRUCTURE IMPOSE QUE TOUTES LES ANCIENNES FONCTIONS
+;;; SONT RÉÉCRITES, AINSI, IMPOSSIBLE DE MODIFIER LES STRUCTURES CRÉÉES AUPARAVANT
+
+
+;;; Les structures peuvent être héritées d'autres structures
+(defstruct ship
+    (name nil)
+    (captain nil)
+    (crew-size nil))
+
+(defstruct (starship (:include ship))
+    (weapons nil)
+    (shiedls nil))
+
+(defstruct (supplyship (:include ship))
+    (cargo nil))
+
+;;; Les accesseurs fonctionnent de façon générique:
+(seft s1 (make-starship :captain "Kirk"))
+(seft s2 (make-supplyship :captain "Zulu"))
+(ship-p s1) ;;;T
+(ship-p s2) ;;;T
+(supplyship-p s1) ;;;NIL
+
+(ship-captain s1) ;;;"Kirk" (fonctionne!)
+(ship-captain s2) ;;;"Zulu" (fonctionne!)
+(supplyship-captain s1) ;;; ERROR s1 n'est pas un supplychip
+

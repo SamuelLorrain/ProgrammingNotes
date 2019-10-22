@@ -1,0 +1,16 @@
+L'important dans l'analyse des algo est la croissance
+asymptomatique.
+On étudie le temps d'execution à la limite.
+
+Théorème : Pour deux fonctions quelconques f(n) et g(n), on a
+    f(n) = Θ(g(n)) ssi f(n) = O(g(n)) et f(n) = Ω(g(n))
+
+    -> Θ (theta) temps d'execution moyen
+    -> O (big O) temps d'execution le plus défavorable
+    -> Ω (omega) temps d'execution le plus favorable
+
+    -> o (little o), borne supérieure qui n'est pas asymptotiquement approchée
+    -> ω (little omega), borne inférieure qui n'est pas asymptotiquement approchée
+
+=> Voir le chapitres 03 "Croissance des fonctions" pour
+des propriétés et révisions sur les fonctions

@@ -1,0 +1,40 @@
+;;;/// VARIABLES GLOBALES ///;;;
+
+(setf *var* 0) ;;;par convention, les variables globales sont entourées de *
+(setf *var* (+ *var* 1)) ;;;Exemple de ré-assignation
+
+(incf *var* 5) ;;;Incrémente *var* de 5
+(decf *var* 5) ;;;Décrémente *var* de 5
+
+(setf list (cons 'foo list)) ;;;Ajouter un element à une list globale
+
+(push 'foo list) ;;; Equivalent
+(pop list)       ;;; Un pop, retourne le premier élement et le supprime de la liste
+
+;;; Toutes ces fonctions (setf incf decf push pop) utilisent une modification
+;;; de pointeur pour l'assignation
+(setf x '(jack benny was 39 for many years))
+(setf (sixth x) 'several)
+x ;;;Renvoi (jack benny was 39 for several years)
+
+;;; On voit que le premier argument de seft est l'endroit vers lequel pointe un pointeur
+;;; On peut donc créer plusieurs pointeurs qui pointent vers la même liste etc..
+
+;;;/// Opérations destructives sur les listes ///;;;
+(setf x '(a b c))
+(append x '(d e f)) ;;;Renvoi '(a b c d e f)
+;; x n'est pas modifé!
+x ;;Renvoi '(a b c)
+(nconc x '(d e f))
+;; x est  modifié!!!
+x ;;Renvoi '(a b c d e f)
+
+;;; NSUBST est un SUBST destructif
+(setf 'x '(b c))
+(nsubst 'a x)
+x ;;Renvoi '(a b c)
+
+;;; On trouve aussi NREVERSE, NUNION, NINTERSECTION, NSET-DIFFERENCE
+;;; NCONC est la version destructive de APPEND, pour des raisons historiques, elle n'ont pas le même nom
+;;; DELETE est la version destructive de REMOVE, pareil, raisons historiques
+

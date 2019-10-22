@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf8"/>
+    <title>Grid</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="fr"/>
+    <style>
+       .wrapper > div{
+           background:#eee;
+           padding:1em;
+        }
+        .wrapper > div:nth-child(odd){
+            background:#ddd;
+        }
+
+        .wrapper{
+            display:grid;
+            grid-template-columns:1fr 2fr 1fr;
+            grid-auto-rows: minmax(100px, auto); /* fixed content size */
+            grid-gap: 1em;
+            justify-items:stretch; /* start, center, end, stretch=default */
+            align-items:stretch; /* start, center, end, stretch=default */
+        }
+
+
+        .box-1{
+            /*align-self:start;*/
+            grid-column: 1;
+            grid-row:1/3;
+            transition: all 1s;
+        }
+        .box-1:hover{
+            grid-column: 1/3;
+        }
+        .box-2{
+            /*align-self:end; */
+            grid-column:3;
+            grid-row:1/3;
+        }
+        .box-3{
+            /* justify-self:end;*/
+            grid-column:2/4;
+            grid-row:3;
+        }
+        .box-4{
+            grid-column:1;
+            grid-row:2/4;
+            border:1px solid #333;
+            transition: all 1s;
+        }
+        .box-4:hover{
+            grid-row:3/4;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="box box-1">
+            Box 1
+        </div>
+        <div class="box box-2">
+            Box 2
+        </div>
+        <div class="box box-3">
+            Box 3
+        </div>
+        <div class="box box-4">
+            Box 4
+        </div>
+    </div>
+</body>
+</html>

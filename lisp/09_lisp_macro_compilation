@@ -1,0 +1,69 @@
+;;;/// MACRO \\\;;;
+;;; Les macros sont des façons d'étendre la syntaxe de LISP
+;;; Ce sont des objets qui n'évaluent pas leurs arguments,
+;;; mais les étendent de façon à pouvoir les évaluer.
+
+;;; Ex: (SETQ A (+ A 1)) pourrait être "macroisé" en (INCF A)
+
+(defmacro simple-incf (var)
+    (list 'setq var (list '+ var 1))) ;;; créé une macro (simple-incf a)
+
+(defmacro simple-incf (var &optional (amount 1))
+    (list 'setq var (list '+ var amount)))
+
+;;; La différence avec une éventuelle fonction incf,
+;;; c'est que les fonctions créent et travaillent avec des variables
+;;; locales.
+;;; On ne peut donc pas modifier de variable globale dans une fonction
+
+;;; Différences entre les macro extension et les functions calls:
+;;; 1. Les arguments d'une fonction ordinaire sont toujours évalués, les arguments d'une macro
+       ne le sont pas
+;;; 2. Le résultat d'une fonction ordinaire peut être tout et n'importe quoi, celle d'une fonction
+       doit être une expression LISP valide
+;;; 3. Une macro retourne une expression qui est évaluée directement. Le résultat d'une fonction
+       ordinaire n'est pas évaluée.
+
+
+;;; Il existe aussi des "fonctions spéciales" comme IF,SETQ,LET,BLOCK qui sont un peu comme des macros
+;;; et des fonctions en même temps.
+
+
+;;; , permet de placer une variable dans une liste précédée d'un '.
+;;; On peut donc réécrire simple-incf:
+(defmacro simple-incf (var &optional (amount 1))
+    '(setq ,var (+ ,var ,amount))
+
+;;; On peut aussi utiliser une macro pour quoter des élements :
+(defmacro two-from-one (func object)
+    '(,func ',object ',object))
+
+(two-from-one cons lapin) ;;;Renvoi (lapin . lapin)
+
+;;; ,@ permet de splicer un élement
+(setf address '(16 maple drive))
+'(machin live at ,address) ;;; Renvoi (machin live at (16 maple drive))
+'(machin live at ,@address) ;;; Renvoi (machin live at 16 maple drive)
+
+
+;;; BODY
+
+;;; Body est un argument spécial dans les macros qui
+;;; indique que l'argument body est une sorte de corps
+;;; de fonction (fonctionne comme &rest enfait)
+(defmacro while (test &body body)
+    '(do ()
+         ((not ,test))
+         ,@body))
+
+;;; ici, on définie une macro while qui fonctionne comme en C
+(while (<i n)
+    (format "~&~S" i)
+    (setf i (* i 2))
+    i)
+
+
+
+
+
+
