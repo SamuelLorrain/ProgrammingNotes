@@ -1,3 +1,3 @@
 # ProgrammingNotes
-bunch of personnal programming notes
+bunch of personal programming notes
 
